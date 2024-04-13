@@ -18,7 +18,7 @@ def main():
         # Turn right
         print("Turning right...")
         pcx.set_dir_servo_angle(10)  # Adjust the angle to control the sharpness of the turn
-        pcx.forward(speed=50)  # Continue driving forward while the wheels are turned
+        pcx.backward(speed=10)  # Continue driving forward while the wheels are turned
         time.sleep(1)  # Adjust time to control the duration of the turn
 
         # Stop the car after the turn
