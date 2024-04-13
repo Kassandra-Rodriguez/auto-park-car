@@ -8,8 +8,8 @@ def main():
     try:
         # Drive forward
         print("Driving forward...")
-        pcx.backward(speed=50)  # Adjust speed as necessary
-        time.sleep(2)  # Adjust time to control how long it drives forward
+        pcx.backward(speed=20)  # Adjust speed as necessary
+        time.sleep(1)  # Adjust time to control how long it drives forward
 
         # Stop the car
         pcx.stop()
