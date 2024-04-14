@@ -1,5 +1,6 @@
 from picarx import Picarx
 import time
+from vilib import Vilib
 
 def scan_for_parking(px, pan_angle=35):
     """
@@ -9,7 +10,7 @@ def scan_for_parking(px, pan_angle=35):
     :param pan_angle: The angle to pan to the right for scanning.
     """
     # Tilt the camera down a bit to see the parking spots better
-    px.set_camera_servo2_angle(-20)
+    px.set_camera_servo1_angle(-20)
     time.sleep(1)
     
     # Start by looking straight ahead
@@ -21,8 +22,7 @@ def scan_for_parking(px, pan_angle=35):
         px.set_camera_servo1_angle(angle)
         time.sleep(0.01)
         
-        # add logic to check for a parking spot.
-
+        # logic to process the video feed and check for a parking spot
     
     # Reset camera position back to straight ahead
     px.set_camera_servo1_angle(0)
@@ -34,15 +34,22 @@ def scan_for_parking(px, pan_angle=35):
 
 if __name__ == "__main__":
     try:
+        # Initialize the PiCar-X and Vilib
         px = Picarx()
-        px.forward(30)  # Drive forward at speed 30
+        
+        # Start the Vilib video stream and display
+        Vilib.camera_start(display=True)  # This will open a window to display the camera feed
+    
+        
+        px.backward(30)  # Drive forward at speed 30
         time.sleep(0.5)
         
-        # scan for parking while driving
+        # Now let's scan for parking while driving
         scan_for_parking(px, pan_angle=35)
         
-        px.forward(0)  # Stop the car
+        px.backward(0)  # Stop the car
         time.sleep(1)
         
     finally:
-        px.forward(0)  # Ensure the car stops if the script is interrupted
+        px.backward(0)  # Ensure the car stops if the script is interrupted
+        Vilib.camera_close()  # Stop the camera stream and close the display window
