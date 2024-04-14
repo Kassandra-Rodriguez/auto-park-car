@@ -2,6 +2,9 @@ from picarx import Picarx
 import time
 from vilib import Vilib
 
+# Initialize the PiCar-X and Vilib
+px = Picarx()
+
 def scan_for_parking(px, pan_angle=35):
     """
     Pans the camera to scan for parking spots.
@@ -34,8 +37,7 @@ def scan_for_parking(px, pan_angle=35):
 
 if __name__ == "__main__":
     try:
-        # Initialize the PiCar-X and Vilib
-        px = Picarx()
+        
         
         # Start the Vilib video stream and display
         Vilib.camera_start(vflip=False,hflip=False) # vflip:vertical flip, hflip:horizontal Flip
