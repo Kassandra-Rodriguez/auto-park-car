@@ -1,44 +1,50 @@
-from gpiozero import Servo
-from time import sleep
 from picarx import Picarx
 from vilib import Vilib
+import time
 
-
-# Initialize PiCar-X and Vilib
+# Initialize the PiCar-X
 pcx = Picarx()
+
+# Start the camera and color detection
 Vilib.camera_start()
-Vilib.detect_color_name('blue')
-
-# Define servos for pan and tilt using GPIO Zero
-tilt_servo = Servo(17)  # GPIO pin 17 corresponds to P1 on the Robot HAT
-pan_servo = Servo(27)  # GPIO pin 27 corresponds to P2 on the Robot HAT
-
-# Function to tilt the camera
-def tilt_camera(angle):
-    """
-    Tilts the camera to the given angle.
-    Parameters:
-        angle (float): The angle to tilt the camera. Ranges from -1 to 1.
-                       -1 is full one direction, 1 is full the other direction.
-    """
-    tilt_servo.value = angle
-    sleep(0.5)  # Give the servo time to move
-
-# Use the function to tilt the camera right
-# Assuming the right direction is somewhere between 0 and 1
-tilt_camera(0.5)  
+Vilib.detect_color_name('blue')  # Assuming 'blue' is a pre-defined color
 
 def search_for_parking():
-    # parking spot search code here
-    pass
+    # Tilt the camera to the right to check for parking space
+    # Adjust the angle as needed for your setup
+    pcx.set_cam_pan_angle(30)  
+    pcx.set_cam_tilt_angle(0)  # Assuming straight ahead is 0 degrees
+    
+    time.sleep(1)  # Give the camera time to move
 
+    # check the camera feed to determine if there is a parking spot
+    # For now, let's assume we have a function that returns True if a parking spot is available
+    if is_parking_spot_available():
+        print("Parking spot found!")
+        pcx.stop()  # Stop the car or initiate parking maneuver
+    else:
+        # No suitable parking spot found, keep driving
+        pcx.forward(20)  # Continue driving forward at a slow speed
+    
+    # Reset camera pan/tilt to default positions
+    pcx.set_cam_pan_angle(0)
+    pcx.set_cam_tilt_angle(0)
+    time.sleep(0.1)  # Allow a short delay for the camera to reset
+
+def is_parking_spot_available():
+    # Placeholder function for parking spot detection logic
+    # implement the actual logic using Vilib's color detection
+    return False
 
 try:
-    search_for_parking()
+    # Start searching for a parking spot
+    while True:
+        search_for_parking()
 except KeyboardInterrupt:
+    # Handle any cleanup on interrupt
     print("Interrupted, stopping the car.")
     pcx.stop()
 finally:
+    # Cleanup
     Vilib.camera_close()
     print("Exiting the script.")
-
