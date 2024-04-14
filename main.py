@@ -1,58 +1,44 @@
+from gpiozero import Servo
+from time import sleep
 from picarx import Picarx
 from vilib import Vilib
-import time
 
-# Initialize the PiCar-X
+
+# Initialize PiCar-X and Vilib
 pcx = Picarx()
-
-# Vilib camera initialization and configuration
 Vilib.camera_start()
-Vilib.color_detect_switch(True)  # Turn on color detection
+Vilib.detect_color_name('blue')
 
-# Define the colors to detect (assumed function names and usage)
-Vilib.detect_color_name('black')
-Vilib.detect_color_name('white')
+# Define servos for pan and tilt using GPIO Zero
+tilt_servo = Servo(17)  # GPIO pin 17 corresponds to P1 on the Robot HAT
+pan_servo = Servo(27)  # GPIO pin 27 corresponds to P2 on the Robot HAT
 
-# Threshold for color detection (you will need to calibrate this)
-DETECTION_THRESHOLD = 5000
+# Function to tilt the camera
+def tilt_camera(angle):
+    """
+    Tilts the camera to the given angle.
+    Parameters:
+        angle (float): The angle to tilt the camera. Ranges from -1 to 1.
+                       -1 is full one direction, 1 is full the other direction.
+    """
+    tilt_servo.value = angle
+    sleep(0.5)  # Give the servo time to move
 
-def move_camera_to_right():
-    # Code to move the camera to the right
-    pass
-
-def car_detected():
-    # Check if 'Vilib' has detected a significant amount of black or white
-    black_detected = Vilib.color_detect_object('black')['size'] > DETECTION_THRESHOLD
-    white_detected = Vilib.color_detect_object('white')['size'] > DETECTION_THRESHOLD
-    return black_detected or white_detected
+# Use the function to tilt the camera right
+# Assuming the right direction is somewhere between 0 and 1
+tilt_camera(0.5)  
 
 def search_for_parking():
-    move_camera_to_right()
-    time.sleep(1)  # Give time for the camera to move and detect color
-    
-    if car_detected():
-        # If a car is detected, drive slowly
-        print("Car detected, driving slowly.")
-        pcx.forward(10)  # Adjust the speed as needed for 'slow'
-    else:
-        # If no car is detected, drive at a normal speed
-        print("No car detected, driving normally.")
-        pcx.forward(30)  # Adjust the speed as needed for 'normal'
-    time.sleep(1)  # Delay for a bit before the next action
+    # parking spot search code here
+    pass
+
 
 try:
-    # Assuming you want to continuously search for parking
-    while True:
-        search_for_parking()
-        time.sleep(0.1)  # Sleep to make the loop manageable
-
+    search_for_parking()
 except KeyboardInterrupt:
-    # If interrupted, stop the car
-    print("Interrupt received, stopping the car.")
+    print("Interrupted, stopping the car.")
     pcx.stop()
-
 finally:
-    # Cleanup
-    Vilib.camera_close()  # Turn off the camera using Vilib
-    Vilib.color_detect_switch(False)  # Turn off color detection
-    pcx.cleanup()  # Clean up GPIO or other resources
+    Vilib.camera_close()
+    print("Exiting the script.")
+
