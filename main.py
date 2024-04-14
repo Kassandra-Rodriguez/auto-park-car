@@ -38,7 +38,11 @@ if __name__ == "__main__":
         px = Picarx()
         
         # Start the Vilib video stream and display
-        Vilib.camera_start(display=True)  # This will open a window to display the camera feed
+        Vilib.camera_start(vflip=False,hflip=False) # vflip:vertical flip, hflip:horizontal Flip
+        # local:local display, web:web display
+        # when local=True, the image window will be displayed on the system desktop
+        # when web=True, the image window will be displayed on the web browser at http://localhost:9000/mjpg
+        Vilib.display(local=True,web=True) 
     
         
         px.backward(30)  # Drive forward at speed 30
@@ -52,4 +56,4 @@ if __name__ == "__main__":
         
     finally:
         px.backward(0)  # Ensure the car stops if the script is interrupted
-        Vilib.camera_close()  # Stop the camera stream and close the display window
+        # Vilib.camera_close()  # Stop the camera stream and close the display window
