@@ -1,42 +1,33 @@
-from picarx import Picarx
 import cv2
-from picamera import PiCamera
-from picamera.array import PiRGBArray
-import time
+from vilib import Vilib
+from picarx import Picarx
 
 
-# Initialize the PiCar-X
+# Initialize the car and camera
 pcx = Picarx()
+Vilib.camera_start()
+Vilib.display(local=True)  # Adjust based on how you want to handle display
+Vilib.detect_color_name('blue')  # If parking spots are marked by a blue line, for example
 
-# Initialize the camera
-camera = PiCamera()
-camera.resolution = (640, 480)
-camera.framerate = 24
-rawCapture = PiRGBArray(camera, size=(640, 480))
+def search_for_parking():
+    while True:
+        frame = Vilib.get_frame()
+        # Process the frame
+        if is_parking_spot(frame):
+            # If a parking spot is detected
+            pcx.stop()
+            break
+        else:
+            # Otherwise, continue driving forward
+            pcx.forward(30)  # Adjust the speed as necessary
 
-def find_parking_spot(frame):
-    # Convert frame to grayscale
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-    # Here you can insert more complex image processing to detect parking lines
-    # For now, let's just simulate that we always find a spot
-    return True
+def is_parking_spot(frame):
+    # Use image processing to determine if the current frame contains a parking spot indicator
+    # This could involve looking for specific colors, patterns, or empty space
+    # Here you would integrate your parking spot detection logic
+    return False  # Replace this with actual detection logic
 
 try:
-    # Start driving forward
-    pcx.backward(speed=50)  # Adjust speed as needed
-
-    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-        image = frame.array
-        
-        # Check for parking spots
-        if find_parking_spot(image):
-            print("Parking spot found!")
-            pcx.stop()  # Stop the car
-            break
-        
-        # Clear the stream for the next frame
-        rawCapture.truncate(0)
-
-except KeyboardInterrupt:
-    pcx.stop()  # Ensure the car stops if the script is interrupted
+    search_for_parking()
+finally:
+    pcx.stop()  # Make sure to stop the car when the script ends
