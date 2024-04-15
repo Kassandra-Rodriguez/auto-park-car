@@ -31,11 +31,13 @@ def move_camera_servos(px):
     px.set_cam_tilt_angle(0)
 
 if __name__ == "__main__":
+    px = None  # Declare px outside try block
     try:
         px = Picarx()  # Initialize the PiCar-X
         move_camera_servos(px)  # Move the camera servos
     except Exception as e:
         print("An error occurred:", e)
     finally:
-        px.stop()  # Ensure motors are stopped
+        if px:  # Check if px is defined before calling stop
+            px.stop()  # Ensure motors are stopped
         print("Operation completed.")
