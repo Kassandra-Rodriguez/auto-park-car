@@ -43,7 +43,7 @@ if __name__ == "__main__":
     try:
         px = Picarx()
         Vilib.display(local=True,web=True) 
-        Vilib.detect_color_object('blue')  # Start color detection (placeholder for your logic to confirm empty spot)
+        Vilib.color_detect(color="blue")  # Start color detection (placeholder for your logic to confirm empty spot)
         look_for_parking(px)
     except Exception as e:
         print(f"An error occurred: {e}")
