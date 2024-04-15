@@ -3,17 +3,17 @@ import time
 
 def look_for_parking(px):
     # Tilt camera to the right to start looking for a parking spot
-    px.set_cam_pan_angle(45)  # Adjust this angle based on your setup
+    px.set_cam_pan_angle(55)  
     
     # Drive forward while the camera is tilted
-    px.forward(30)  # Set speed; adjust based on your need
+    px.backward(10)  # Set speed;
     
     # Assuming detection logic is handled elsewhere and triggers a stop
     try:
         while True:
             # Here you would typically check for parking spot detection
             # For demonstration, let's just run this for a few seconds
-            time.sleep(10)
+            time.sleep(3)
             break
     finally:
         # Stop the car and reset the camera position once done or if an error occurs
