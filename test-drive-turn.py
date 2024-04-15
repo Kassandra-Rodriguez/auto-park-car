@@ -19,8 +19,7 @@ def look_for_parking(px):
                 # Turn the camera to the right to check the spot
                 px.set_cam_pan_angle(95)  # Tilt camera to right to check the spot
                 
-                # Start camera stream with vilib (you need to start this beforehand and implement the method check_if_spot_is_empty)
-                Vilib.camera_start(vflip=False,hflip=False) # vflip:vertical flip, hflip:horizontal Flip
+                
                 
                 time.sleep(1)  # Give camera time to adjust and stream
                 if Vilib.check_if_spot_is_empty():  # This is a placeholder for your spot checking logic
@@ -42,6 +41,8 @@ def look_for_parking(px):
 if __name__ == "__main__":
     try:
         px = Picarx()
+        # Start camera stream with vilib (you need to start this beforehand and implement the method check_if_spot_is_empty)
+        Vilib.camera_start(vflip=False,hflip=False) # vflip:vertical flip, hflip:horizontal Flip
         Vilib.display(local=True,web=True) 
         Vilib.color_detect(color="blue")  # Start color detection (placeholder for your logic to confirm empty spot)
         look_for_parking(px)
