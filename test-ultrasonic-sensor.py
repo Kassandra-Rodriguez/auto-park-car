@@ -1,25 +1,19 @@
-from robot_hat import Ultrasonic
+from picarx import Picarx
 import time
 
-def test_ultrasonic_sensor(ultrasonic):
+def test_ultrasonic_sensor():
+    px = Picarx()  # Initialize the Picar-x
     try:
         while True:
-            distance = ultrasonic.get_distance()  # Use the appropriate method to read the distance
-            print(f"Distance: {distance} cm")
-            time.sleep(1)
+            distance = px.ultrasonic.read()  # Read the distance measurement from the ultrasonic sensor
+            print(f"Distance: {distance} cm")  # Print the distance
+            time.sleep(1)  # Wait for 1 second before the next read
     except KeyboardInterrupt:
         print("Stopping ultrasonic sensor test.")
     finally:
-        # Add any cleanup code if necessary for your ultrasonic sensor library
-        print("Ultrasonic sensor test completed.")
+        # Insert the cleanup code here
+        px.cleanup()  # Replace this with the actual cleanup method if it's different.
+        print("GPIO pins have been cleaned up.")
 
 if __name__ == "__main__":
-    ultrasonic = None
-    try:
-        ultrasonic = Ultrasonic()  # Initialize the Ultrasonic sensor
-        test_ultrasonic_sensor(ultrasonic)
-    except Exception as e:
-        print("An error occurred:", e)
-    finally:
-        # If there's any cleanup for the ultrasonic sensor specifically, do it here
-        print("Operation completed.")
+    test_ultrasonic_sensor()
