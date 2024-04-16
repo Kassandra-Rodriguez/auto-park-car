@@ -9,7 +9,11 @@ def test_ultrasonic_sensor():
             print(f"Distance: {distance} cm")  # Print the distance
             time.sleep(1)  # Wait for 1 second before the next read
     except KeyboardInterrupt:
-        print("Ultrasonic sensor test stopped.")
+        print("Stopping ultrasonic sensor test.")
+    finally:
+        # Insert the cleanup code here
+        px.cleanup()  # Replace this with the actual cleanup method if it's different.
+        print("GPIO pins have been cleaned up.")
 
 if __name__ == "__main__":
     test_ultrasonic_sensor()
