@@ -13,6 +13,17 @@ def confirm_parking_spot(px):
     time.sleep(1)  # Wait for a moment to stabilize the camera
     
     # Insert logic here to use the camera feed for final confirmation
+    
+    print("Potential empty spot detected. Capturing image for confirmation.")
+    px.stop()  # Stop the car if a spot is detected
+    _time = time.strftime("%y-%m-%d_%H-%M-%S", time.localtime())
+    path = "/home/kassandrarodriguez/auto-park-car/photos/"
+    Vilib.take_photo(str(_time), path)
+    image_path = f"{path}/{_time}.jpg"
+    print(f"The photo saved as: {image_path}")
+    # Here you would add the logic to process the image and confirm the spot is empty
+    
+    return
 
 def find_parking_spot(px, distance_threshold):
     px.backward(speed=1)  # Move forward at a slow speed
