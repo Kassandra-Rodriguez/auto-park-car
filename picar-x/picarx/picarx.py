@@ -133,7 +133,7 @@ class Picarx(object):
 
         # Scale speed for finer control at lower speeds
         if speed != 0:
-            speed = (speed / 100.0) * 50  # Example scaling: 0% to 50% of full speed
+            speed = (speed / 100.0) * 10  # Example scaling: 0% to 50% of full speed
 
         # Apply direction and scaled speed
         if direction < 0:

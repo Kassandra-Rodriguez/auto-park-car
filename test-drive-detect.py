@@ -8,7 +8,7 @@ def confirm_parking_spot(px):
     and potentially using the camera feed for confirmation.
     """
     # Angle to turn camera to the right; adjust based on your setup
-    right_angle = 65
+    right_angle = 85
     px.set_cam_pan_angle(right_angle)
     time.sleep(1)  # Wait for a moment to stabilize the camera
     
