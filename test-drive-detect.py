@@ -8,14 +8,14 @@ def confirm_parking_spot(px):
     and potentially using the camera feed for confirmation.
     """
     # Angle to turn camera to the right; adjust based on your setup
-    right_angle = 35
+    right_angle = 65
     px.set_cam_pan_angle(right_angle)
     time.sleep(1)  # Wait for a moment to stabilize the camera
     
     # Insert logic here to use the camera feed for final confirmation
 
 def find_parking_spot(px, distance_threshold):
-    px.backward(speed=10)  # Move forward at a slow speed
+    px.backward(speed=1)  # Move forward at a slow speed
     try:
         while True:
             distance = px.ultrasonic.read()  # Get the distance reading
@@ -23,6 +23,8 @@ def find_parking_spot(px, distance_threshold):
             if distance > distance_threshold:
                 print("Potential empty spot detected.")
                 px.backward(0)  # Stop the car
+                px.forward(0.0006) # go back just a little bit
+                
                 confirm_parking_spot(px)
                 break
             time.sleep(0.5)
