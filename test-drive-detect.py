@@ -9,7 +9,7 @@ def confirm_parking_spot(px):
     """
     # Angle to turn camera to the right; adjust based on your setup
     right_angle = 35
-    px.set_camera_servo1_angle(right_angle)
+    px.set_cam_pan_angle(right_angle)
     time.sleep(1)  # Wait for a moment to stabilize the camera
     
     # Insert logic here to use the camera feed for final confirmation
@@ -47,7 +47,6 @@ if __name__ == "__main__":
         
     finally:
         # Clean up and reset camera servos to default position
-        px.set_camera_servo1_angle(0)
-        px.set_camera_servo2_angle(0)
-        px.forward(0)  # Stop the car
+        px.set_cam_pan_angle(0)
+        px.backward(0)  # Stop the car
         Vilib.camera_close()  # Turn off the camera when done
