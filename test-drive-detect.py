@@ -15,14 +15,14 @@ def confirm_parking_spot(px):
     # Insert logic here to use the camera feed for final confirmation
 
 def find_parking_spot(px, distance_threshold):
-    px.forward(speed=10)  # Move forward at a slow speed
+    px.backward(speed=10)  # Move forward at a slow speed
     try:
         while True:
             distance = px.ultrasonic.read()  # Get the distance reading
             print(f"Distance: {distance} cm")
             if distance > distance_threshold:
                 print("Potential empty spot detected.")
-                px.forward(0)  # Stop the car
+                px.backward(0)  # Stop the car
                 confirm_parking_spot(px)
                 break
             time.sleep(0.5)
