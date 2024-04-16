@@ -23,7 +23,7 @@ def find_parking_spot(px, distance_threshold):
             if distance > distance_threshold:
                 print("Potential empty spot detected.")
                 px.backward(0)  # Stop the car
-                px.forward(0.0006) # go back just a little bit
+                
                 
                 confirm_parking_spot(px)
                 break
