@@ -6,40 +6,55 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def is_parking_spot_empty(image_path):
+    """
+        Here we check if the parking spot is empty. We convert the still frame into a HSV format
+        so that we can better identify blue spots in the image
+    """
     image = cv2.imread(image_path)
     if image is None:
         print("Error: Image not found or cannot be loaded.")
         return False
 
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    lower_blue = np.array([100, 150, 50])  # Adjust these values based on the actual blue tape color
+    
+    # We find that these value are close to the tape color we are using in our
+    # controlled env
+    lower_blue = np.array([100, 150, 50])  
     upper_blue = np.array([140, 255, 255])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
 
+    # Creates a small square array used for image processing
     kernel = np.ones((5, 5), np.uint8)
+    
+    # helps remove small white noise
     mask_cleaned = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
+    # calculates the proportion of the mask that is blue
     coverage_ratio = np.sum(mask_cleaned > 0) / mask_cleaned.size
 
+    # Convert the original BGR image to RGB
     plt.figure(figsize=(10, 5))
     plt.subplot(1, 3, 1)
     plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     plt.title('Original Image')
     plt.axis('off')
 
+    # Binary image in grayscale
     plt.subplot(1, 3, 2)
     plt.imshow(mask, cmap='gray')
     plt.title('HSV Mask')
     plt.axis('off')
 
+    # Cleaned mask as a grayscale image
     plt.subplot(1, 3, 3)
     plt.imshow(mask_cleaned, cmap='gray')
     plt.title('Cleaned Mask')
     plt.axis('off')
 
+    # Can only display when we aren't using the terminal method to run the drive.py file
     plt.show()
 
-    return coverage_ratio > 0.05  # Adjust this threshold as needed
+    return coverage_ratio > 0.05
 
 def confirm_parking_spot(px):
     right_angle = 90
@@ -60,16 +75,28 @@ def confirm_parking_spot(px):
         # Drive into the parking spot
         px.forward(speed=2)
         time.sleep(0.4)
-        px.set_dir_servo_angle(25)  # Steer right, adjust angle based on need
-        time.sleep(0.5)  # Give a moment for the car to align
-        px.backward(speed=1)  # Adjust speed as necessary
-        time.sleep(4)  # Adjust duration based on the distance to fully enter the spot
+        
+        # Steer right
+        px.set_dir_servo_angle(25)
+        time.sleep(0.5)
+        px.backward(speed=1)
+        
+        # Allows us time to drive into the parking spot
+        time.sleep(4)
         px.stop()
-        px.set_dir_servo_angle(0)  # Reset steering angle
+        
+        # Reset steering angle
+        px.set_dir_servo_angle(0) 
     else:
         print("The parking spot is not empty.")
 
 def find_parking_spot(px, distance_threshold):
+    """ Here we use the ultrasonic sensor to continuously search for a threshold greater that 20
+        Drive forward = px.backward
+        Drive backward = px.forward
+    """
+    
+    # We move backward because for some reason backward is actually forward
     px.backward(speed=1)
     try:
         while True:

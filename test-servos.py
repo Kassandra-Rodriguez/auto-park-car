@@ -1,11 +1,6 @@
-from robot_hat import Pin, ADC, PWM, Servo, fileDB
-from robot_hat import Grayscale_Module, Ultrasonic, utils
 import time
-import os
 from picarx import Picarx
 
-
-# Assuming Picarx class is already defined as you have shown
 
 def move_camera_servos(px):
     # Sweep the pan servo from -90 to 90 degrees and back
@@ -13,7 +8,8 @@ def move_camera_servos(px):
         px.set_cam_pan_angle(angle)
         time.sleep(0.1)
     
-    for angle in range(90, -91, -5):  # Return to starting position
+    # Return to starting position
+    for angle in range(90, -91, -5):  
         px.set_cam_pan_angle(angle)
         time.sleep(0.1)
 
