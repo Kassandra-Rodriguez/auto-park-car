@@ -57,7 +57,13 @@ def confirm_parking_spot(px):
 
     if is_parking_spot_empty(image_path):
         print("The parking spot is empty.")
-        # Additional logic to drive into the parking spot
+        # Drive into the parking spot
+        px.set_dir_servo_angle(20)  # Steer right, adjust angle based on need
+        time.sleep(0.5)  # Give a moment for the car to align
+        px.backward(speed=1)  # Adjust speed as necessary
+        time.sleep(3)  # Adjust duration based on the distance to fully enter the spot
+        px.stop()
+        px.set_dir_servo_angle(0)  # Reset steering angle
     else:
         print("The parking spot is not empty.")
 
@@ -68,7 +74,7 @@ def find_parking_spot(px, distance_threshold):
             distance = px.ultrasonic.read()
             if distance > distance_threshold:
                 print("Potential empty spot detected.")
-                px.backward(0)
+                px.backward(0)  # Stop the car
                 confirm_parking_spot(px)
                 break
             time.sleep(0.5)
