@@ -42,7 +42,7 @@ def is_parking_spot_empty(image_path):
     return coverage_ratio > 0.05  # Adjust this threshold as needed
 
 def confirm_parking_spot(px):
-    right_angle = 85
+    right_angle = 90
     down_angle = -20  # Tilt the camera down to focus on the ground
     px.set_cam_pan_angle(right_angle)
     px.set_cam_tilt_angle(down_angle)
@@ -58,10 +58,12 @@ def confirm_parking_spot(px):
     if is_parking_spot_empty(image_path):
         print("The parking spot is empty.")
         # Drive into the parking spot
-        px.set_dir_servo_angle(20)  # Steer right, adjust angle based on need
+        px.forward(speed=2)
+        time.sleep(0.4)
+        px.set_dir_servo_angle(25)  # Steer right, adjust angle based on need
         time.sleep(0.5)  # Give a moment for the car to align
         px.backward(speed=1)  # Adjust speed as necessary
-        time.sleep(3)  # Adjust duration based on the distance to fully enter the spot
+        time.sleep(4)  # Adjust duration based on the distance to fully enter the spot
         px.stop()
         px.set_dir_servo_angle(0)  # Reset steering angle
     else:
