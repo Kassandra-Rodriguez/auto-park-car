@@ -5,11 +5,17 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def is_parking_spot_empty(image_path):
     """
         Here we check if the parking spot is empty. We convert the still frame into a HSV format
         so that we can better identify blue spots in the image
     """
+    import os
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
     image = cv2.imread(image_path)
     if image is None:
         print("Error: Image not found or cannot be loaded.")
@@ -17,44 +23,96 @@ def is_parking_spot_empty(image_path):
 
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     
-    # We find that these value are close to the tape color we are using in our
-    # controlled env
+    # Define the blue color range for masking
     lower_blue = np.array([100, 150, 50])  
     upper_blue = np.array([140, 255, 255])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
 
-    # Creates a small square array used for image processing
+    # Create a kernel for morphological operations
     kernel = np.ones((5, 5), np.uint8)
     
-    # helps remove small white noise
+    # Remove small white noise from the mask
     mask_cleaned = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
-    # calculates the proportion of the mask that is blue
+    # Calculate the proportion of the mask that is blue
     coverage_ratio = np.sum(mask_cleaned > 0) / mask_cleaned.size
 
-    # Convert the original BGR image to RGB
+    # Set up the plot
     plt.figure(figsize=(10, 5))
     plt.subplot(1, 3, 1)
     plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     plt.title('Original Image')
     plt.axis('off')
 
-    # Binary image in grayscale
     plt.subplot(1, 3, 2)
     plt.imshow(mask, cmap='gray')
     plt.title('HSV Mask')
     plt.axis('off')
 
-    # Cleaned mask as a grayscale image
     plt.subplot(1, 3, 3)
     plt.imshow(mask_cleaned, cmap='gray')
     plt.title('Cleaned Mask')
     plt.axis('off')
 
-    # Can only display when we aren't using the terminal method to run the drive.py file
-    plt.show()
+    # Save the plot to the same location as the images
+    plot_path = os.path.join(os.path.dirname(image_path), 'analysis_plot.png')
+    plt.savefig(plot_path)
+    plt.close()  # Close the figure to free up memory
+
+    print(f"Analysis plot saved to {plot_path}")
 
     return coverage_ratio > 0.05
+
+# def is_parking_spot_empty(image_path):
+#     """
+#         Here we check if the parking spot is empty. We convert the still frame into a HSV format
+#         so that we can better identify blue spots in the image
+#     """
+#     image = cv2.imread(image_path)
+#     if image is None:
+#         print("Error: Image not found or cannot be loaded.")
+#         return False
+
+#     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+#     # We find that these value are close to the tape color we are using in our
+#     # controlled env
+#     lower_blue = np.array([100, 150, 50])  
+#     upper_blue = np.array([140, 255, 255])
+#     mask = cv2.inRange(hsv, lower_blue, upper_blue)
+
+#     # Creates a small square array used for image processing
+#     kernel = np.ones((5, 5), np.uint8)
+    
+#     # helps remove small white noise
+#     mask_cleaned = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+
+#     # calculates the proportion of the mask that is blue
+#     coverage_ratio = np.sum(mask_cleaned > 0) / mask_cleaned.size
+
+#     # Convert the original BGR image to RGB
+#     plt.figure(figsize=(10, 5))
+#     plt.subplot(1, 3, 1)
+#     plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+#     plt.title('Original Image')
+#     plt.axis('off')
+
+#     # Binary image in grayscale
+#     plt.subplot(1, 3, 2)
+#     plt.imshow(mask, cmap='gray')
+#     plt.title('HSV Mask')
+#     plt.axis('off')
+
+#     # Cleaned mask as a grayscale image
+#     plt.subplot(1, 3, 3)
+#     plt.imshow(mask_cleaned, cmap='gray')
+#     plt.title('Cleaned Mask')
+#     plt.axis('off')
+
+#     # Can only display when we aren't using the terminal method to run the drive.py file
+#     plt.show()
+
+#     return coverage_ratio > 0.05
 
 def confirm_parking_spot(px):
     right_angle = 90
@@ -79,7 +137,7 @@ def confirm_parking_spot(px):
         # Steer right
         px.set_dir_servo_angle(25)
         time.sleep(0.5)
-        px.backward(speed=1)
+        px.backward(speed=2)
         
         # Allows us time to drive into the parking spot
         time.sleep(4)
