@@ -1,6 +1,31 @@
 from picarx import Picarx
 import time
 from vilib import Vilib
+import cv2
+import numpy as np
+
+
+def is_parking_spot_empty(image_path):
+    # Load the image
+    image = cv2.imread(image_path)
+
+    # Convert the image from BGR to HSV color space
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    # Define the range of color you're interested in
+    # Example: detect light gray color; adjust the range based on your specific needs
+    lower_bound = np.array([0, 0, 200])  # Lower HSV boundary
+    upper_bound = np.array([180, 25, 255])  # Upper HSV boundary
+
+    # Create a mask to extract regions of interest
+    mask = cv2.inRange(hsv, lower_bound, upper_bound)
+
+    # Calculate the percentage of the area covered by the detected color
+    coverage_ratio = np.sum(mask > 0) / mask.size
+
+    # Assume spot is empty if the detected color covers more than 30% of the image
+    return coverage_ratio > 0.3
+
 
 def confirm_parking_spot(px):
     """
@@ -22,8 +47,14 @@ def confirm_parking_spot(px):
     image_path = f"{path}/{_time}.jpg"
     print(f"The photo saved as: {image_path}")
     # Here you would add the logic to process the image and confirm the spot is empty
-    
-    return
+    # Example usage
+
+    if is_parking_spot_empty(image_path):
+        print("The parking spot is empty.")
+    else:
+        print("The parking spot is not empty.")
+        
+        return
 
 def find_parking_spot(px, distance_threshold):
     px.backward(speed=1)  # Move forward at a slow speed
