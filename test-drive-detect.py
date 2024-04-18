@@ -6,25 +6,28 @@ import numpy as np
 
 
 def is_parking_spot_empty(image_path):
-    # Load the image
     image = cv2.imread(image_path)
+    if image is None:
+        print("Error: Image not found or cannot be loaded.")
+        return False
 
-    # Convert the image from BGR to HSV color space
+    # Apply a Gaussian blur to smooth out the image
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    lower_bound = np.array([0, 0, 200])  # Adjust based on your environment
+    upper_bound = np.array([180, 25, 255])
 
-    # Define the range of color you're interested in
-    # Example: detect light gray color; adjust the range based on your specific needs
-    lower_bound = np.array([0, 0, 200])  # Lower HSV boundary
-    upper_bound = np.array([180, 25, 255])  # Upper HSV boundary
-
-    # Create a mask to extract regions of interest
     mask = cv2.inRange(hsv, lower_bound, upper_bound)
 
-    # Calculate the percentage of the area covered by the detected color
+    # Optional: Apply erosion and dilation to remove small noise
+    kernel = np.ones((5,5), np.uint8)
+    mask = cv2.erode(mask, kernel, iterations=1)
+    mask = cv2.dilate(mask, kernel, iterations=1)
+
     coverage_ratio = np.sum(mask > 0) / mask.size
 
-    # Assume spot is empty if the detected color covers more than 30% of the image
-    return coverage_ratio > 0.3
+    return coverage_ratio > 0.3  # Adjust this threshold as needed
 
 
 def confirm_parking_spot(px):
