@@ -3,29 +3,47 @@ import time
 from vilib import Vilib
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def is_parking_spot_empty(image_path):
+    # Load the image
     image = cv2.imread(image_path)
     if image is None:
         print("Error: Image not found or cannot be loaded.")
         return False
 
-    # Apply a Gaussian blur to smooth out the image
-    image = cv2.GaussianBlur(image, (5, 5), 0)
-
+    # Convert to HSV and create a mask
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    lower_bound = np.array([0, 0, 200])  # Adjust based on your environment
+    lower_bound = np.array([0, 0, 200])  # Adjust these values based on your observation
     upper_bound = np.array([180, 25, 255])
-
     mask = cv2.inRange(hsv, lower_bound, upper_bound)
 
-    # Optional: Apply erosion and dilation to remove small noise
-    kernel = np.ones((5,5), np.uint8)
-    mask = cv2.erode(mask, kernel, iterations=1)
-    mask = cv2.dilate(mask, kernel, iterations=1)
+    # Optional: apply morphological operations to clean up the mask
+    kernel = np.ones((5, 5), np.uint8)
+    mask_cleaned = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
-    coverage_ratio = np.sum(mask > 0) / mask.size
+    # Calculate coverage ratio
+    coverage_ratio = np.sum(mask_cleaned > 0) / mask_cleaned.size
+
+    # Display the original image and the mask
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1, 3, 1)
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.title('Original Image')
+    plt.axis('off')
+
+    plt.subplot(1, 3, 2)
+    plt.imshow(mask, cmap='gray')
+    plt.title('HSV Mask')
+    plt.axis('off')
+
+    plt.subplot(1, 3, 3)
+    plt.imshow(mask_cleaned, cmap='gray')
+    plt.title('Cleaned Mask')
+    plt.axis('off')
+
+    plt.show()
 
     return coverage_ratio > 0.3  # Adjust this threshold as needed
 
