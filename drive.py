@@ -121,19 +121,6 @@ def find_parking_spot(px, distance_threshold):
         px.stop()
         print("Finished scanning for parking spots.")
 
-# if __name__ == "__main__":
-#     try:
-#         px = Picarx()
-#         Vilib.camera_start(vflip=False, hflip=False)
-#         Vilib.display(local=True, web=True)
-#         distance_threshold = 20
-#         find_parking_spot(px, distance_threshold)
-#     finally:
-#         px.set_cam_pan_angle(0)
-#         px.set_cam_tilt_angle(0)
-#         px.stop()
-#         Vilib.camera_close()
-
 if __name__ == "__main__":
     px = Picarx()
     Vilib.camera_start(vflip=False, hflip=False)
