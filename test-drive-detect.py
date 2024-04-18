@@ -21,7 +21,8 @@ def confirm_parking_spot(px):
     # Insert logic here to use the camera feed for final confirmation
     
     print("Potential empty spot detected. Capturing image for confirmation.")
-    px.stop()  # Stop the car if a spot is detected
+    # Stop the car if a spot is detected
+    px.stop()  
     _time = time.strftime("%y-%m-%d_%H-%M-%S", time.localtime())
     path = "/home/kassandrarodriguez/auto-park-car/photos/"
     Vilib.take_photo(str(_time), path)
@@ -36,16 +37,18 @@ def confirm_parking_spot(px):
         return
 
 def find_parking_spot(px, distance_threshold):
-    px.backward(speed=1)  # Move forward at a slow speed
+    # Move forward at a slow speed
+    px.backward(speed=1)  
     try:
         while True:
-            distance = px.ultrasonic.read()  # Get the distance reading
+            # Get the distance reading
+            distance = px.ultrasonic.read() 
             print(f"Distance: {distance} cm")
             if distance > distance_threshold:
                 print("Potential empty spot detected.")
-                px.backward(0)  # Stop the car
                 
-                
+                # Stop the car
+                px.backward(0)
                 confirm_parking_spot(px)
                 break
             time.sleep(0.5)
@@ -64,12 +67,17 @@ if __name__ == "__main__":
         Vilib.display(local=True, web=True)
         
         # Define the threshold for detecting a parking spot
-        distance_threshold = 20  # You might need to adjust this value
+        # Anything greater than 20 means that the spot might empty
+        distance_threshold = 20
         
         find_parking_spot(px, distance_threshold)
         
     finally:
         # Clean up and reset camera servos to default position
         px.set_cam_pan_angle(0)
-        px.backward(0)  # Stop the car
-        Vilib.camera_close()  # Turn off the camera when done
+        
+        # Stop the car
+        px.backward(0)
+        
+        # Turn off the camera when done
+        Vilib.camera_close()

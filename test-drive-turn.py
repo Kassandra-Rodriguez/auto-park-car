@@ -19,8 +19,8 @@ def look_for_parking(px):
                 # Turn the camera to the right to check the spot
                 px.set_cam_pan_angle(95)
                 
-                
-                time.sleep(1)  # Give camera time to adjust and stream
+                # Give camera time to adjust and stream
+                time.sleep(1)  
                 if Vilib.check_if_spot_is_empty():
                     print("Spot is empty. Proceed to park.")
                     px.stop()

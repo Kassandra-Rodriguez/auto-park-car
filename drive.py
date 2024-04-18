@@ -65,12 +65,18 @@ def is_parking_spot_empty(image_path):
 
 
 def confirm_parking_spot(px):
+    """
+        Here we confirm if the parking spot is available
+    """
     right_angle = 90
-    down_angle = -20  # Tilt the camera down to focus on the ground
+    down_angle = -20 
     px.set_cam_pan_angle(right_angle)
     px.set_cam_tilt_angle(down_angle)
-    time.sleep(1)  # Wait for the camera to stabilize
+    
+    # Wait for the camera to stabilize
+    time.sleep(1)
 
+    # Here we take a frame and save it 
     print("Camera adjusted, capturing image for confirmation.")
     _time = time.strftime("%y-%m-%d_%H-%M-%S", time.localtime())
     path = "/home/kassandrarodriguez/auto-park-car/photos/"
@@ -80,6 +86,7 @@ def confirm_parking_spot(px):
 
     if is_parking_spot_empty(image_path):
         print("The parking spot is empty.")
+        
         # Drive into the parking spot
         px.forward(speed=2)
         time.sleep(0.4)
@@ -111,7 +118,9 @@ def find_parking_spot(px, distance_threshold):
             distance = px.ultrasonic.read()
             if distance > distance_threshold:
                 print("Potential empty spot detected.")
-                px.backward(0)  # Stop the car
+                
+                # Stop the car
+                px.backward(0)  
                 confirm_parking_spot(px)
                 break
             time.sleep(0.5)
@@ -128,7 +137,9 @@ if __name__ == "__main__":
     
     # Adding a terminal-based GUI interaction
     print("Press ENTER to start the parking detection or 'Q' to quit.")
-    user_input = input("Input: ").strip().upper()  # Get user input and handle case insensitivity
+    
+    # Get user input
+    user_input = input("Input: ").strip().upper()
     
     if user_input == 'Q':
         print("Exiting program.")

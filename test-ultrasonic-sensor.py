@@ -2,17 +2,20 @@ from picarx import Picarx
 import time
 
 def test_ultrasonic_sensor():
-    px = Picarx()  # Initialize the Picar-x
+    # Initialize the Picarx
+    px = Picarx()  
     try:
         while True:
-            distance = px.ultrasonic.read()  # Read the distance measurement from the ultrasonic sensor
-            print(f"Distance: {distance} cm")  # Print the distance
-            time.sleep(1)  # Wait for 1 second before the next read
+            # Read the distance measurement from the ultrasonic sensor
+            distance = px.ultrasonic.read() 
+            print(f"Distance: {distance} cm") 
+            
+            #  Wait for 1 second before the next read 
+            time.sleep(1) 
     except KeyboardInterrupt:
         print("Stopping ultrasonic sensor test.")
     finally:
-        # Insert the cleanup code here
-        px.cleanup()  # Replace this with the actual cleanup method if it's different.
+        px.stop() 
         print("GPIO pins have been cleaned up.")
 
 if __name__ == "__main__":
