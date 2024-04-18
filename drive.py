@@ -113,11 +113,35 @@ def find_parking_spot(px, distance_threshold):
         px.stop()
         print("Finished scanning for parking spots.")
 
+# if __name__ == "__main__":
+#     try:
+#         px = Picarx()
+#         Vilib.camera_start(vflip=False, hflip=False)
+#         Vilib.display(local=True, web=True)
+#         distance_threshold = 20
+#         find_parking_spot(px, distance_threshold)
+#     finally:
+#         px.set_cam_pan_angle(0)
+#         px.set_cam_tilt_angle(0)
+#         px.stop()
+#         Vilib.camera_close()
+
 if __name__ == "__main__":
+    px = Picarx()
+    Vilib.camera_start(vflip=False, hflip=False)
+    Vilib.display(local=True, web=True)
+    
+    # Adding a terminal-based GUI interaction
+    print("Press ENTER to start the parking detection or 'Q' to quit.")
+    user_input = input("Input: ").strip().upper()  # Get user input and handle case insensitivity
+    
+    if user_input == 'Q':
+        print("Exiting program.")
+        Vilib.camera_close()
+        exit(0)
+    
+    print("Starting parking detection...")
     try:
-        px = Picarx()
-        Vilib.camera_start(vflip=False, hflip=False)
-        Vilib.display(local=True, web=True)
         distance_threshold = 20
         find_parking_spot(px, distance_threshold)
     finally:
@@ -125,3 +149,5 @@ if __name__ == "__main__":
         px.set_cam_tilt_angle(0)
         px.stop()
         Vilib.camera_close()
+        print("Program has ended.")
+
