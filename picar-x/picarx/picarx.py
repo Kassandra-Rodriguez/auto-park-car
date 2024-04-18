@@ -92,56 +92,56 @@ class Picarx(object):
         trig, echo= ultrasonic_pins
         self.ultrasonic = Ultrasonic(Pin(trig), Pin(echo, mode=Pin.IN, pull=Pin.PULL_DOWN))
         
-    # def set_motor_speed(self, motor, speed):
-    #     ''' set motor speed
-        
-    #     param motor: motor index, 1 means left motor, 2 means right motor
-    #     type motor: int
-    #     param speed: speed
-    #     type speed: int      
-    #     '''
-    #     speed = constrain(speed, -100, 100)
-    #     motor -= 1
-    #     if speed >= 0:
-    #         direction = 1 * self.cali_dir_value[motor]
-    #     elif speed < 0:
-    #         direction = -1 * self.cali_dir_value[motor]
-    #     speed = abs(speed)
-    #     if speed != 0:
-    #         speed = int(speed /2 ) + 50
-    #     speed = speed - self.cali_speed_value[motor]
-    #     if direction < 0:
-    #         self.motor_direction_pins[motor].high()
-    #         self.motor_speed_pins[motor].pulse_width_percent(speed)
-    #     else:
-    #         self.motor_direction_pins[motor].low()
-    #         self.motor_speed_pins[motor].pulse_width_percent(speed)
-    
     def set_motor_speed(self, motor, speed):
-        '''
-        Set motor speed with enhanced control at lower speeds.
+        ''' set motor speed
         
-        Param motor: motor index, 1 means left motor, 2 means right motor
-        Param speed: speed from -100 to 100
+        param motor: motor index, 1 means left motor, 2 means right motor
+        type motor: int
+        param speed: speed
+        type speed: int      
         '''
-        motor -= 1  # Adjust motor index for 0-based list index
-        direction = 1 if speed >= 0 else -1
+        speed = constrain(speed, -100, 100)
+        motor -= 1
+        if speed >= 0:
+            direction = 1 * self.cali_dir_value[motor]
+        elif speed < 0:
+            direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
-
-        # Apply calibration for direction
-        direction *= self.cali_dir_value[motor]
-
-        # Scale speed for finer control at lower speeds
         if speed != 0:
-            speed = (speed / 100.0) * 10  # Example scaling: 0% to 50% of full speed
-
-        # Apply direction and scaled speed
+            speed = int(speed /2 ) + 50
+        speed = speed - self.cali_speed_value[motor]
         if direction < 0:
             self.motor_direction_pins[motor].high()
+            self.motor_speed_pins[motor].pulse_width_percent(speed)
         else:
             self.motor_direction_pins[motor].low()
+            self.motor_speed_pins[motor].pulse_width_percent(speed)
+    
+    # def set_motor_speed(self, motor, speed):
+    #     '''
+    #     Set motor speed with enhanced control at lower speeds.
+        
+    #     Param motor: motor index, 1 means left motor, 2 means right motor
+    #     Param speed: speed from -100 to 100
+    #     '''
+    #     motor -= 1  # Adjust motor index for 0-based list index
+    #     direction = 1 if speed >= 0 else -1
+    #     speed = abs(speed)
 
-        self.motor_speed_pins[motor].pulse_width_percent(speed)
+    #     # Apply calibration for direction
+    #     direction *= self.cali_dir_value[motor]
+
+    #     # Scale speed for finer control at lower speeds
+    #     if speed != 0:
+    #         speed = (speed / 100.0) * 10  # Example scaling: 0% to 50% of full speed
+
+    #     # Apply direction and scaled speed
+    #     if direction < 0:
+    #         self.motor_direction_pins[motor].high()
+    #     else:
+    #         self.motor_direction_pins[motor].low()
+
+    #     self.motor_speed_pins[motor].pulse_width_percent(speed)
 
 
     def motor_speed_calibration(self, value):
