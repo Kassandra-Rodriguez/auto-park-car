@@ -8,7 +8,7 @@ def start_drive():
     """Route to start the drive.py script."""
     try:
         # Starting the drive.py script as a subprocess
-        subprocess.Popen(['python3', '/home/kassandrarodriguez/auto-park-car/drive.py'])
+        subprocess.Popen(['python3', '/home/kassandrarodriguez/auto-park-car/extra-credit-Kassandra/drive.py'])
         return "Drive script initiated successfully.", 200
     except Exception as e:
         return f"Failed to start the script: {str(e)}", 500
