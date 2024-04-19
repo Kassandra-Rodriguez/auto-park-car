@@ -107,16 +107,6 @@ if __name__ == "__main__":
     #Vilib.camera_start(vflip=False, hflip=False)
     #Vilib.display(local=True, web=True)
     
-    # Adding a terminal-based GUI interaction
-    print("Press ENTER to start the parking detection or 'Q' to quit.")
-    
-    # Get user input
-    user_input = input("Input: ").strip().upper()
-    
-    if user_input == 'Q':
-        print("Exiting program.")
-        #Vilib.camera_close()
-        exit(0)
     
     print("Starting parking detection...")
     try:
