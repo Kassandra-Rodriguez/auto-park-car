@@ -2,23 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drive Script Controller</title>
+    <title>Drive Controller</title>
 </head>
 <body>
-    <h1>Control Panel</h1>
-    <button onclick="startScript()">Start Drive.py</button>
-
+    <h1>Drive Script Control Panel</h1>
+    <button onclick="startDrive()">Start Drive.py</button>
+    
     <script>
-        function startScript() {
-            fetch('/start-script', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json())
-              .then(data => alert(data.status))
-              .catch(error => console.error('Error:', error));
+        function startDrive() {
+            fetch('/start-drive')
+                .then(response => response.text())
+                .then(data => alert(data))
+                .catch(error => console.error('Error:', error));
         }
     </script>
 </body>

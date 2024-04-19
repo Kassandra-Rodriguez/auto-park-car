@@ -1,11 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template
 import subprocess
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('/home/kassandrarodriguez/auto-park-car/extra-credit-Kassandra/templates/index.html')
+    return render_template('index.html')
+
 
 @app.route('/start-drive')
 def start_drive():
