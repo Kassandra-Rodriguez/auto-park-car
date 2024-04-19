@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PiCar Control Panel</title>
+</head>
+<body>
+    <h1>PiCar Control Interface</h1>
+    <button onclick="startDriving()">Start Driving</button>
+
+    <script>
+        function startDriving() {
+            fetch('/start-driving', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => alert('Response: ' + data.status));
+        }
+    </script>
+</body>
+</html>
