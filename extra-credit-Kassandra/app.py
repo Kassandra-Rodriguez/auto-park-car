@@ -1,5 +1,5 @@
-import subprocess
 from flask import Flask, render_template, request, jsonify
+import subprocess
 
 app = Flask(__name__)
 
@@ -7,12 +7,12 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/start-driving', methods=['POST'])
-def start_driving():
+@app.route('/start-script', methods=['POST'])
+def start_script():
     try:
-        # Start drive.py as a subprocess
+        # Start the drive.py script as a subprocess
         subprocess.Popen(["python3", "drive.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return jsonify({'status': 'Drive script started successfully'})
+        return jsonify({'status': 'Script started successfully'})
     except Exception as e:
         return jsonify({'status': 'Failed to start the script', 'error': str(e)})
 

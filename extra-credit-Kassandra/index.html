@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>PiCar Control Panel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive Script Controller</title>
 </head>
 <body>
-    <h1>PiCar Control Interface</h1>
-    <button onclick="startDriving()">Start Driving</button>
+    <h1>Control Panel</h1>
+    <button onclick="startScript()">Start Drive.py</button>
 
     <script>
-        function startDriving() {
-            fetch('/start-driving', {
+        function startScript() {
+            fetch('/start-script', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => alert('Response: ' + data.status));
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json())
+              .then(data => alert(data.status))
+              .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
