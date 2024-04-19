@@ -1,9 +1,9 @@
 from picarx import Picarx
 import time
-from vilib import Vilib
-import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+
+image_path = "/home/kassandrarodriguez/auto-park-car/photos/24-04-16_16-50-12.jpg"
 
 
 def is_parking_spot_empty(image_path):
@@ -53,9 +53,6 @@ def confirm_parking_spot(px):
     # Wait for the camera to stabilize
     time.sleep(1)
 
-
-    image_path = "/home/kassandrarodriguez/auto-park-car/photos/24-04-16_16-50-12.jpg"
-
     if is_parking_spot_empty(image_path):
         print("The parking spot is empty.")
         
@@ -104,8 +101,6 @@ def find_parking_spot(px, distance_threshold):
 
 if __name__ == "__main__":
     px = Picarx()
-    #Vilib.camera_start(vflip=False, hflip=False)
-    #Vilib.display(local=True, web=True)
     
     
     print("Starting parking detection...")
